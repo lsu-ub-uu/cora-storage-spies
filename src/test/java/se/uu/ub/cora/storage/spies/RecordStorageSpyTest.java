@@ -16,7 +16,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.testspies.storage;
+package se.uu.ub.cora.storage.spies;
 
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
