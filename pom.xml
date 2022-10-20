@@ -12,14 +12,14 @@
 	<name>storage-spies</name>
 	
 	<properties>
-		<coradata.version>7.2-SNAPSHOT</coradata.version>
-		<coradataspies.version>1.0-SNAPSHOT</coradataspies.version>
-		<json.version>3.3.0</json.version>
-		<storage.version>7.0-SNAPSHOT</storage.version>
+		<coradata.version>7.2.0</coradata.version>
+		<coradataspies.version>1.0.0</coradataspies.version>
+		<json.version>3.4.0</json.version>
+		<storage.version>7.0.0</storage.version>
 		<logger.version>2.5.0</logger.version>
-		<initialize.version>1.0-SNAPSHOT</initialize.version>
-		<testutils.version>1.6-SNAPSHOT</testutils.version>
-		<testutils-spies.version>1.0-SNAPSHOT</testutils-spies.version>
+		<initialize.version>1.0.0</initialize.version>
+		<testutils.version>1.6.0</testutils.version>
+		<testutils-spies.version>1.0.0</testutils-spies.version>
 	</properties>
 	
 	<scm>
