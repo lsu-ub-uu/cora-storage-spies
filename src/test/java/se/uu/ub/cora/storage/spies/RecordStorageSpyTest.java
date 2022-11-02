@@ -19,6 +19,7 @@
 package se.uu.ub.cora.storage.spies;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
@@ -112,14 +113,14 @@ public class RecordStorageSpyTest {
 
 	@Test
 	public void testDefaultLinksExistForRecord() throws Exception {
-		assertTrue(recordStorage.linksExistForRecord("someType", "someId"));
+		assertFalse(recordStorage.linksExistForRecord("someType", "someId"));
 	}
 
 	@Test
 	public void testLinksExistForRecord() throws Exception {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
-				(Supplier<Boolean>) () -> false);
+				(Supplier<Boolean>) () -> true);
 
 		boolean retunedValue = recordStorage.linksExistForRecord("someType", "someId");
 
@@ -173,14 +174,14 @@ public class RecordStorageSpyTest {
 	public void testDefaultRecordExists() throws Exception {
 		List<String> types = List.of("someType");
 
-		assertTrue(recordStorage.recordExists(types, "someId"));
+		assertFalse(recordStorage.recordExists(types, "someId"));
 	}
 
 	@Test
 	public void testRecordExist() throws Exception {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
-				(Supplier<Boolean>) () -> false);
+				(Supplier<Boolean>) () -> true);
 		List<String> types = List.of("someType");
 
 		boolean retunedValue = recordStorage.recordExists(types, "someId");
@@ -214,7 +215,7 @@ public class RecordStorageSpyTest {
 	public void testDefaultGetTotalNumberOfRecordsForTypes() throws Exception {
 		assertEquals(
 				recordStorage.getTotalNumberOfRecordsForTypes(List.of("types"), new DataGroupSpy()),
-				123);
+				0);
 	}
 
 	@Test

@@ -40,11 +40,11 @@ public class RecordStorageSpy implements RecordStorage {
 		MCR.useMRV(MRV);
 		MRV.setDefaultReturnValuesSupplier("read", DataGroupSpy::new);
 		MRV.setDefaultReturnValuesSupplier("readList", StorageReadResult::new);
-		MRV.setDefaultReturnValuesSupplier("linksExistForRecord", (Supplier<Boolean>) () -> true);
-		MRV.setDefaultReturnValuesSupplier("recordExists", (Supplier<Boolean>) () -> true);
+		MRV.setDefaultReturnValuesSupplier("linksExistForRecord", (Supplier<Boolean>) () -> false);
+		MRV.setDefaultReturnValuesSupplier("recordExists", (Supplier<Boolean>) () -> false);
 		MRV.setDefaultReturnValuesSupplier("getLinksToRecord", Collections::emptyList);
 		MRV.setDefaultReturnValuesSupplier("getTotalNumberOfRecordsForTypes",
-				(Supplier<Long>) () -> 123L);
+				(Supplier<Long>) () -> 0L);
 	}
 
 	@Override
