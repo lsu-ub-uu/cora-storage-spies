@@ -18,15 +18,22 @@
  */
 package se.uu.ub.cora.storage.spies;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.data.collected.Link;
+import se.uu.ub.cora.data.collected.StorageTerm;
 import se.uu.ub.cora.data.spies.DataGroupSpy;
 import se.uu.ub.cora.storage.StorageReadResult;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
@@ -61,7 +68,7 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testReadRecord() throws Exception {
+	public void testRead() throws Exception {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV, DataGroupSpy::new);
 
@@ -75,13 +82,79 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
+	public void testCreate() throws Exception {
+		recordStorage.MCR = MCRSpy;
+		DataGroup data = new DataGroupSpy();
+		List<StorageTerm> storageTerms = new ArrayList<>();
+		List<Link> links = new ArrayList<>();
+
+		recordStorage.create("someType", "someId", data, storageTerms, links, "someDataDivider");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "type", "someType");
+		mcrForSpy.assertParameter(ADD_CALL, 0, "id", "someId");
+		mcrForSpy.assertParameter(ADD_CALL, 0, "dataRecord", data);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "storageTerms", storageTerms);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "links", links);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "dataDivider", "someDataDivider");
+	}
+
+	@Test
+	public void testDeleteByTypeAndId() throws Exception {
+		recordStorage.MCR = MCRSpy;
+
+		recordStorage.deleteByTypeAndId("someType", "someId");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "type", "someType");
+		mcrForSpy.assertParameter(ADD_CALL, 0, "id", "someId");
+	}
+
+	@Test
+	public void testDefaultLinksExistForRecord() throws Exception {
+		assertTrue(recordStorage.linksExistForRecord("someType", "someId"));
+	}
+
+	@Test
+	public void testLinksExistForRecord() throws Exception {
+		recordStorage.MCR = MCRSpy;
+		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
+				(Supplier<Boolean>) () -> false);
+
+		boolean retunedValue = recordStorage.linksExistForRecord("someType", "someId");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "type", "someType");
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", "someId");
+		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
+	}
+
+	@Test
+	public void testUpdate() throws Exception {
+		recordStorage.MCR = MCRSpy;
+		DataGroup data = new DataGroupSpy();
+		List<StorageTerm> storageTerms = new ArrayList<>();
+		List<Link> links = new ArrayList<>();
+
+		recordStorage.update("someType", "someId", data, storageTerms, links, "someDataDivider");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "type", "someType");
+		mcrForSpy.assertParameter(ADD_CALL, 0, "id", "someId");
+		mcrForSpy.assertParameter(ADD_CALL, 0, "dataRecord", data);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "storageTerms", storageTerms);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "links", links);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "dataDivider", "someDataDivider");
+	}
+
+	@Test
 	public void testDefaultReadList() throws Exception {
 		assertTrue(recordStorage.readList(List.of("types"),
 				new DataGroupSpy()) instanceof StorageReadResult);
 	}
 
 	@Test
-	public void testReadRecordList() throws Exception {
+	public void testReadList() throws Exception {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				StorageReadResult::new);
@@ -96,4 +169,67 @@ public class RecordStorageSpyTest {
 		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
 	}
 
+	@Test
+	public void testDefaultRecordExists() throws Exception {
+		List<String> types = List.of("someType");
+
+		assertTrue(recordStorage.recordExists(types, "someId"));
+	}
+
+	@Test
+	public void testRecordExist() throws Exception {
+		recordStorage.MCR = MCRSpy;
+		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
+				(Supplier<Boolean>) () -> false);
+		List<String> types = List.of("someType");
+
+		boolean retunedValue = recordStorage.recordExists(types, "someId");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "types", types);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", "someId");
+		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
+	}
+
+	@Test
+	public void testDefaultGetLinksToRecord() throws Exception {
+		assertEquals(recordStorage.getLinksToRecord("someType", "someId"), Collections.emptyList());
+	}
+
+	@Test
+	public void testGetLinksToRecord() throws Exception {
+		recordStorage.MCR = MCRSpy;
+		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
+				(Supplier<Collection<Link>>) () -> new ArrayList<>());
+
+		Collection<Link> retunedValue = recordStorage.getLinksToRecord("someType", "someId");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "type", "someType");
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", "someId");
+		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
+	}
+
+	@Test
+	public void testDefaultGetTotalNumberOfRecordsForTypes() throws Exception {
+		assertEquals(
+				recordStorage.getTotalNumberOfRecordsForTypes(List.of("types"), new DataGroupSpy()),
+				123);
+	}
+
+	@Test
+	public void testGetTotalNumberOfRecordsForTypes() throws Exception {
+		recordStorage.MCR = MCRSpy;
+		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
+				(Supplier<Long>) () -> 321L);
+
+		List<String> types = List.of("someType");
+		DataGroupSpy filter = new DataGroupSpy();
+		long retunedValue = recordStorage.getTotalNumberOfRecordsForTypes(types, filter);
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "types", types);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "filter", filter);
+		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
+	}
 }
