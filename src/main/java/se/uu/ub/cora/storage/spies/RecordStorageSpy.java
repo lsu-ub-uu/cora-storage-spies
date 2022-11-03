@@ -19,7 +19,9 @@
 package se.uu.ub.cora.storage.spies;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.collected.Link;
@@ -38,6 +40,11 @@ public class RecordStorageSpy implements RecordStorage {
 		MCR.useMRV(MRV);
 		MRV.setDefaultReturnValuesSupplier("read", DataGroupSpy::new);
 		MRV.setDefaultReturnValuesSupplier("readList", StorageReadResult::new);
+		MRV.setDefaultReturnValuesSupplier("linksExistForRecord", (Supplier<Boolean>) () -> false);
+		MRV.setDefaultReturnValuesSupplier("recordExists", (Supplier<Boolean>) () -> false);
+		MRV.setDefaultReturnValuesSupplier("getLinksToRecord", Collections::emptyList);
+		MRV.setDefaultReturnValuesSupplier("getTotalNumberOfRecordsForTypes",
+				(Supplier<Long>) () -> 0L);
 	}
 
 	@Override
@@ -48,27 +55,26 @@ public class RecordStorageSpy implements RecordStorage {
 	@Override
 	public void create(String type, String id, DataGroup dataRecord, List<StorageTerm> storageTerms,
 			List<Link> links, String dataDivider) {
-		// TODO Auto-generated method stub
-
+		MCR.addCall("type", type, "id", id, "dataRecord", dataRecord, "storageTerms", storageTerms,
+				"links", links, "dataDivider", dataDivider);
 	}
 
 	@Override
 	public void deleteByTypeAndId(String type, String id) {
-		// TODO Auto-generated method stub
+		MCR.addCall("type", type, "id", id);
 
 	}
 
 	@Override
 	public boolean linksExistForRecord(String type, String id) {
-		// TODO Auto-generated method stub
-		return false;
+		return (boolean) MCR.addCallAndReturnFromMRV("type", type, "id", id);
 	}
 
 	@Override
 	public void update(String type, String id, DataGroup dataRecord, List<StorageTerm> storageTerms,
 			List<Link> links, String dataDivider) {
-		// TODO Auto-generated method stub
-
+		MCR.addCall("type", type, "id", id, "dataRecord", dataRecord, "storageTerms", storageTerms,
+				"links", links, "dataDivider", dataDivider);
 	}
 
 	@Override
@@ -77,22 +83,18 @@ public class RecordStorageSpy implements RecordStorage {
 	}
 
 	@Override
-	public boolean recordExistsForListOfImplementingRecordTypesAndRecordId(List<String> types,
-			String id) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean recordExists(List<String> types, String id) {
+		return (boolean) MCR.addCallAndReturnFromMRV("types", types, "id", id);
 	}
 
 	@Override
-	public Collection<DataGroup> generateLinkCollectionPointingToRecord(String type, String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<Link> getLinksToRecord(String type, String id) {
+		return (Collection<Link>) MCR.addCallAndReturnFromMRV("type", type, "id", id);
 	}
 
 	@Override
 	public long getTotalNumberOfRecordsForTypes(List<String> types, DataGroup filter) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (long) MCR.addCallAndReturnFromMRV("types", types, "filter", filter);
 	}
 
 }
