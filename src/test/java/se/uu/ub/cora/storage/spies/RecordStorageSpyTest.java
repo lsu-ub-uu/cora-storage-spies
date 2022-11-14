@@ -36,6 +36,7 @@ import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.collected.Link;
 import se.uu.ub.cora.data.collected.StorageTerm;
 import se.uu.ub.cora.data.spies.DataGroupSpy;
+import se.uu.ub.cora.storage.Filter;
 import se.uu.ub.cora.storage.StorageReadResult;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 import se.uu.ub.cora.testutils.mrv.MethodReturnValues;
@@ -151,7 +152,7 @@ public class RecordStorageSpyTest {
 	@Test
 	public void testDefaultReadList() throws Exception {
 		assertTrue(recordStorage.readList(List.of("types"),
-				new DataGroupSpy()) instanceof StorageReadResult);
+				new Filter()) instanceof StorageReadResult);
 	}
 
 	@Test
@@ -161,7 +162,7 @@ public class RecordStorageSpyTest {
 				StorageReadResult::new);
 
 		List<String> types = List.of("someType");
-		DataGroupSpy filter = new DataGroupSpy();
+		Filter filter = new Filter();
 		StorageReadResult retunedValue = recordStorage.readList(types, filter);
 
 		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
@@ -213,8 +214,7 @@ public class RecordStorageSpyTest {
 
 	@Test
 	public void testDefaultGetTotalNumberOfRecordsForTypes() throws Exception {
-		assertEquals(
-				recordStorage.getTotalNumberOfRecordsForTypes(List.of("types"), new DataGroupSpy()),
+		assertEquals(recordStorage.getTotalNumberOfRecordsForTypes(List.of("types"), new Filter()),
 				0);
 	}
 
@@ -225,7 +225,7 @@ public class RecordStorageSpyTest {
 				(Supplier<Long>) () -> 321L);
 
 		List<String> types = List.of("someType");
-		DataGroupSpy filter = new DataGroupSpy();
+		Filter filter = new Filter();
 		long retunedValue = recordStorage.getTotalNumberOfRecordsForTypes(types, filter);
 
 		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);

@@ -27,6 +27,7 @@ import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.collected.Link;
 import se.uu.ub.cora.data.collected.StorageTerm;
 import se.uu.ub.cora.data.spies.DataGroupSpy;
+import se.uu.ub.cora.storage.Filter;
 import se.uu.ub.cora.storage.RecordStorage;
 import se.uu.ub.cora.storage.StorageReadResult;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
@@ -78,7 +79,7 @@ public class RecordStorageSpy implements RecordStorage {
 	}
 
 	@Override
-	public StorageReadResult readList(List<String> types, DataGroup filter) {
+	public StorageReadResult readList(List<String> types, Filter filter) {
 		return (StorageReadResult) MCR.addCallAndReturnFromMRV("types", types, "filter", filter);
 	}
 
@@ -93,7 +94,7 @@ public class RecordStorageSpy implements RecordStorage {
 	}
 
 	@Override
-	public long getTotalNumberOfRecordsForTypes(List<String> types, DataGroup filter) {
+	public long getTotalNumberOfRecordsForTypes(List<String> types, Filter filter) {
 		return (long) MCR.addCallAndReturnFromMRV("types", types, "filter", filter);
 	}
 
