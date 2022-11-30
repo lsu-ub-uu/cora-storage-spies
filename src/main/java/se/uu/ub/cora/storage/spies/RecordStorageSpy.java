@@ -18,9 +18,9 @@
  */
 package se.uu.ub.cora.storage.spies;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import se.uu.ub.cora.data.DataGroup;
@@ -43,7 +43,7 @@ public class RecordStorageSpy implements RecordStorage {
 		MRV.setDefaultReturnValuesSupplier("readList", StorageReadResult::new);
 		MRV.setDefaultReturnValuesSupplier("linksExistForRecord", (Supplier<Boolean>) () -> false);
 		MRV.setDefaultReturnValuesSupplier("recordExists", (Supplier<Boolean>) () -> false);
-		MRV.setDefaultReturnValuesSupplier("getLinksToRecord", Collections::emptyList);
+		MRV.setDefaultReturnValuesSupplier("getLinksToRecord", Collections::emptySet);
 		MRV.setDefaultReturnValuesSupplier("getTotalNumberOfRecordsForTypes",
 				(Supplier<Long>) () -> 0L);
 	}
@@ -54,8 +54,8 @@ public class RecordStorageSpy implements RecordStorage {
 	}
 
 	@Override
-	public void create(String type, String id, DataGroup dataRecord, List<StorageTerm> storageTerms,
-			List<Link> links, String dataDivider) {
+	public void create(String type, String id, DataGroup dataRecord, Set<StorageTerm> storageTerms,
+			Set<Link> links, String dataDivider) {
 		MCR.addCall("type", type, "id", id, "dataRecord", dataRecord, "storageTerms", storageTerms,
 				"links", links, "dataDivider", dataDivider);
 	}
@@ -72,8 +72,8 @@ public class RecordStorageSpy implements RecordStorage {
 	}
 
 	@Override
-	public void update(String type, String id, DataGroup dataRecord, List<StorageTerm> storageTerms,
-			List<Link> links, String dataDivider) {
+	public void update(String type, String id, DataGroup dataRecord, Set<StorageTerm> storageTerms,
+			Set<Link> links, String dataDivider) {
 		MCR.addCall("type", type, "id", id, "dataRecord", dataRecord, "storageTerms", storageTerms,
 				"links", links, "dataDivider", dataDivider);
 	}
@@ -89,8 +89,8 @@ public class RecordStorageSpy implements RecordStorage {
 	}
 
 	@Override
-	public Collection<Link> getLinksToRecord(String type, String id) {
-		return (Collection<Link>) MCR.addCallAndReturnFromMRV("type", type, "id", id);
+	public Set<Link> getLinksToRecord(String type, String id) {
+		return (Set<Link>) MCR.addCallAndReturnFromMRV("type", type, "id", id);
 	}
 
 	@Override

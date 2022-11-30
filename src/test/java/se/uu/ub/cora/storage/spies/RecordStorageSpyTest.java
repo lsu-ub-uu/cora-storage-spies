@@ -23,10 +23,11 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.testng.annotations.BeforeMethod;
@@ -87,8 +88,8 @@ public class RecordStorageSpyTest {
 	public void testCreate() throws Exception {
 		recordStorage.MCR = MCRSpy;
 		DataGroup data = new DataGroupSpy();
-		List<StorageTerm> storageTerms = new ArrayList<>();
-		List<Link> links = new ArrayList<>();
+		Set<StorageTerm> storageTerms = new LinkedHashSet<>();
+		Set<Link> links = new LinkedHashSet<>();
 
 		recordStorage.create("someType", "someId", data, storageTerms, links, "someDataDivider");
 
@@ -135,8 +136,8 @@ public class RecordStorageSpyTest {
 	public void testUpdate() throws Exception {
 		recordStorage.MCR = MCRSpy;
 		DataGroup data = new DataGroupSpy();
-		List<StorageTerm> storageTerms = new ArrayList<>();
-		List<Link> links = new ArrayList<>();
+		Set<StorageTerm> storageTerms = new LinkedHashSet<>();
+		Set<Link> links = new LinkedHashSet<>();
 
 		recordStorage.update("someType", "someId", data, storageTerms, links, "someDataDivider");
 
@@ -202,7 +203,7 @@ public class RecordStorageSpyTest {
 	public void testGetLinksToRecord() throws Exception {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
-				(Supplier<Collection<Link>>) () -> new ArrayList<>());
+				(Supplier<Set<Link>>) () -> new LinkedHashSet<>());
 
 		Collection<Link> retunedValue = recordStorage.getLinksToRecord("someType", "someId");
 
