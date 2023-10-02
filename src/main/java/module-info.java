@@ -11,4 +11,5 @@ module se.uu.ub.cora.storage.spies {
 	requires se.uu.ub.cora.data;
 
 	exports se.uu.ub.cora.storage.spies;
+	exports se.uu.ub.cora.storage.spies.archive;
 }
