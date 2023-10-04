@@ -34,9 +34,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.data.DataRecordGroup;
 import se.uu.ub.cora.data.collected.Link;
 import se.uu.ub.cora.data.collected.StorageTerm;
 import se.uu.ub.cora.data.spies.DataGroupSpy;
+import se.uu.ub.cora.data.spies.DataRecordGroupSpy;
 import se.uu.ub.cora.storage.Filter;
 import se.uu.ub.cora.storage.StorageReadResult;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
@@ -66,12 +68,12 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testDefaultRead() throws Exception {
+	public void testDefaultReadOld() throws Exception {
 		assertTrue(recordStorage.read(List.of("types"), "id") instanceof DataGroupSpy);
 	}
 
 	@Test
-	public void testRead() throws Exception {
+	public void testReadOld() throws Exception {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV, DataGroupSpy::new);
 
@@ -80,6 +82,26 @@ public class RecordStorageSpyTest {
 
 		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
 		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "types", types);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", "id");
+		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
+	}
+
+	// TODO: see comments on the implementation class.
+	// @Test
+	// public void testDefaultRead() throws Exception {
+	// assertTrue(recordStorage.read("type", "id") instanceof DataRecordGroupSpy);
+	// }
+
+	@Test
+	public void testRead() throws Exception {
+		recordStorage.MCR = MCRSpy;
+		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
+				DataRecordGroupSpy::new);
+
+		DataRecordGroup retunedValue = recordStorage.read("type", "id");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "type", "type");
 		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", "id");
 		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
 	}

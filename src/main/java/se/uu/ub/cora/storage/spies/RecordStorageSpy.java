@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import se.uu.ub.cora.data.DataGroup;
+import se.uu.ub.cora.data.DataRecordGroup;
 import se.uu.ub.cora.data.collected.Link;
 import se.uu.ub.cora.data.collected.StorageTerm;
 import se.uu.ub.cora.data.spies.DataGroupSpy;
@@ -39,7 +40,12 @@ public class RecordStorageSpy implements RecordStorage {
 
 	public RecordStorageSpy() {
 		MCR.useMRV(MRV);
+
+		// TODO: We do not have possibility to overload methods in MRV.
+		// Meanwhile no default value will be returned for new read in this spy. Pleas fix.
 		MRV.setDefaultReturnValuesSupplier("read", DataGroupSpy::new);
+		// MRV.setDefaultReturnValuesSupplier("read", DataRecordGroupSpy::new);
+
 		MRV.setDefaultReturnValuesSupplier("readList", StorageReadResult::new);
 		MRV.setDefaultReturnValuesSupplier("linksExistForRecord", (Supplier<Boolean>) () -> false);
 		MRV.setDefaultReturnValuesSupplier("recordExists", (Supplier<Boolean>) () -> false);
@@ -51,6 +57,11 @@ public class RecordStorageSpy implements RecordStorage {
 	@Override
 	public DataGroup read(List<String> types, String id) {
 		return (DataGroup) MCR.addCallAndReturnFromMRV("types", types, "id", id);
+	}
+
+	@Override
+	public DataRecordGroup read(String type, String id) {
+		return (DataRecordGroup) MCR.addCallAndReturnFromMRV("type", type, "id", id);
 	}
 
 	@Override
