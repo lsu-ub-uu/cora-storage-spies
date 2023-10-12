@@ -15,7 +15,7 @@
 		<coradata.version>8.0.0</coradata.version>
 		<coradataspies.version>1.6.0</coradataspies.version>
 		<json.version>3.9.0</json.version>
-		<storage.version>9.0.0</storage.version>
+		<storage.version>9.1-SNAPSHOT</storage.version>
 		<logger.version>2.10.0</logger.version>
 		<initialize.version>1.5.0</initialize.version>
 		<testutils.version>1.11.0</testutils.version>

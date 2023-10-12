@@ -28,8 +28,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.storage.archive.ResourceMetadata;
-import se.uu.ub.cora.storage.spies.archive.InputStreamSpy;
-import se.uu.ub.cora.storage.spies.archive.ResourceArchiveSpy;
+import se.uu.ub.cora.storage.archive.record.ResourceMetadataToUpdate;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 import se.uu.ub.cora.testutils.mrv.MethodReturnValues;
 import se.uu.ub.cora.testutils.spies.MCRSpy;
@@ -132,12 +131,27 @@ public class ResourceArchiveSpyTest {
 	}
 
 	@Test
+	public void testUpdateMetadata() throws Exception {
+		replaceDefaultMCRWithTheOneFromTestToEnableTestOfHowTheSpyUsesMCR();
+		ResourceMetadataToUpdate resourceMetadataToUpdate = new ResourceMetadataToUpdate(
+				"someOriginalFileName", "someMimeType");
+
+		resourceArchiveSpy.updateMetadata(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID,
+				resourceMetadataToUpdate);
+
+		mcrForSpy.assertParameter(ADD_CALL, 0, "dataDivider", SOME_DATA_DVIDER);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "type", SOME_TYPE);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "id", SOME_ID);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "resourceMetadataToUpdate",
+				resourceMetadataToUpdate);
+	}
+
+	@Test
 	public void testUpdate() throws Exception {
 		replaceDefaultMCRWithTheOneFromTestToEnableTestOfHowTheSpyUsesMCR();
 
 		resourceArchiveSpy.update(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID, resource, SOME_MIME_TYPE);
 
-		mcrForSpy.assertMethodWasCalled(ADD_CALL);
 		mcrForSpy.assertParameter(ADD_CALL, 0, "dataDivider", SOME_DATA_DVIDER);
 		mcrForSpy.assertParameter(ADD_CALL, 0, "type", SOME_TYPE);
 		mcrForSpy.assertParameter(ADD_CALL, 0, "id", SOME_ID);
