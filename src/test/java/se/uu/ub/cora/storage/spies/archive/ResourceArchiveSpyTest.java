@@ -66,7 +66,7 @@ public class ResourceArchiveSpyTest {
 	public void testCreate() throws Exception {
 		replaceDefaultMCRWithTheOneFromTestToEnableTestOfHowTheSpyUsesMCR();
 
-		resourceArchiveSpy.create(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID, resource, SOME_MIME_TYPE);
+		resourceArchiveSpy.createMasterResource(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID, resource, SOME_MIME_TYPE);
 
 		mcrForSpy.assertMethodWasCalled(ADD_CALL);
 		mcrForSpy.assertParameter(ADD_CALL, 0, "dataDivider", SOME_DATA_DVIDER);
@@ -83,7 +83,7 @@ public class ResourceArchiveSpyTest {
 	@Test
 	public void testDefaultRead() throws Exception {
 
-		InputStream read = resourceArchiveSpy.read(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID);
+		InputStream read = resourceArchiveSpy.readMasterResource(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID);
 		assertTrue(read instanceof InputStreamSpy);
 	}
 
@@ -92,7 +92,7 @@ public class ResourceArchiveSpyTest {
 		replaceDefaultMCRWithTheOneFromTestToEnableTestOfHowTheSpyUsesMCR();
 
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV, () -> resource);
-		InputStream readResource = resourceArchiveSpy.read(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID);
+		InputStream readResource = resourceArchiveSpy.readMasterResource(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID);
 
 		assertEquals(readResource, resource);
 
@@ -104,7 +104,7 @@ public class ResourceArchiveSpyTest {
 
 	@Test
 	public void testDefaultReadMetadata() throws Exception {
-		ResourceMetadata resourceMetadata = resourceArchiveSpy.readMetadata(SOME_DATA_DVIDER,
+		ResourceMetadata resourceMetadata = resourceArchiveSpy.readMasterResourceMetadata(SOME_DATA_DVIDER,
 				SOME_TYPE, SOME_ID);
 
 		assertEquals(resourceMetadata.fileSize(), "someFileSize");
@@ -119,7 +119,7 @@ public class ResourceArchiveSpyTest {
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				() -> resourceMetadata);
 
-		ResourceMetadata readMetadata = resourceArchiveSpy.readMetadata(SOME_DATA_DVIDER, SOME_TYPE,
+		ResourceMetadata readMetadata = resourceArchiveSpy.readMasterResourceMetadata(SOME_DATA_DVIDER, SOME_TYPE,
 				SOME_ID);
 
 		assertEquals(readMetadata, resourceMetadata);
@@ -136,7 +136,7 @@ public class ResourceArchiveSpyTest {
 		ResourceMetadataToUpdate resourceMetadataToUpdate = new ResourceMetadataToUpdate(
 				"someOriginalFileName", "someMimeType");
 
-		resourceArchiveSpy.updateMetadata(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID,
+		resourceArchiveSpy.updateMasterResourceMetadata(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID,
 				resourceMetadataToUpdate);
 
 		mcrForSpy.assertParameter(ADD_CALL, 0, "dataDivider", SOME_DATA_DVIDER);

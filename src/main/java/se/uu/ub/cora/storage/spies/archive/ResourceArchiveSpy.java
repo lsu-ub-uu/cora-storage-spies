@@ -32,33 +32,33 @@ public class ResourceArchiveSpy implements ResourceArchive {
 
 	public ResourceArchiveSpy() {
 		MCR.useMRV(MRV);
-		MRV.setDefaultReturnValuesSupplier("create", () -> 100L);
-		MRV.setDefaultReturnValuesSupplier("read", InputStreamSpy::new);
-		MRV.setDefaultReturnValuesSupplier("readMetadata",
+		MRV.setDefaultReturnValuesSupplier("createMasterResource", () -> 100L);
+		MRV.setDefaultReturnValuesSupplier("readMasterResource", InputStreamSpy::new);
+		MRV.setDefaultReturnValuesSupplier("readMasterResourceMetadata",
 				() -> new ResourceMetadata("someFileSize", "someChecksumSHA512"));
 	}
 
 	@Override
-	public void create(String dataDivider, String type, String id, InputStream resource,
-			String mimeType) {
+	public void createMasterResource(String dataDivider, String type, String id,
+			InputStream resource, String mimeType) {
 		MCR.addCall("dataDivider", dataDivider, "type", type, "id", id, "resource", resource,
 				"mimeType", mimeType);
 	}
 
 	@Override
-	public InputStream read(String dataDivider, String type, String id) {
+	public InputStream readMasterResource(String dataDivider, String type, String id) {
 		return (InputStream) MCR.addCallAndReturnFromMRV("dataDivider", dataDivider, "type", type,
 				"id", id);
 	}
 
 	@Override
-	public ResourceMetadata readMetadata(String dataDivider, String type, String id) {
+	public ResourceMetadata readMasterResourceMetadata(String dataDivider, String type, String id) {
 		return (ResourceMetadata) MCR.addCallAndReturnFromMRV("dataDivider", dataDivider, "type",
 				type, "id", id);
 	}
 
 	@Override
-	public void updateMetadata(String dataDivider, String type, String id,
+	public void updateMasterResourceMetadata(String dataDivider, String type, String id,
 			ResourceMetadataToUpdate resourceMetadataToUpdate) {
 		MCR.addCall("dataDivider", dataDivider, "type", type, "id", id, "resourceMetadataToUpdate",
 				resourceMetadataToUpdate);
