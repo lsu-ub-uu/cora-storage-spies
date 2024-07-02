@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>se.uu.ub.cora</groupId>
 		<artifactId>cora-parent</artifactId>
-		<version>2.5.0</version>
+		<version>2.6.0</version>
 	</parent>
 
 	<artifactId>storage-spies</artifactId>
@@ -18,7 +18,7 @@
 		<storage.version>9.1.0</storage.version>
 		<logger.version>2.10.0</logger.version>
 		<initialize.version>1.6.0</initialize.version>
-		<testutils.version>1.11.0</testutils.version>
+		<testutils.version>1.13.0</testutils.version>
 		<testutils-spies.version>1.5.0</testutils-spies.version>
 	</properties>
 	
