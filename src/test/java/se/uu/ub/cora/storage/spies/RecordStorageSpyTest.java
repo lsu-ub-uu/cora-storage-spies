@@ -174,12 +174,33 @@ public class RecordStorageSpyTest {
 
 	@Test
 	public void testDefaultReadList() throws Exception {
+		assertTrue(recordStorage.readList("types", new Filter()) instanceof StorageReadResult);
+	}
+
+	@Test
+	public void testReadList() throws Exception {
+		recordStorage.MCR = MCRSpy;
+		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
+				StorageReadResult::new);
+
+		String type = "someType";
+		Filter filter = new Filter();
+		StorageReadResult retunedValue = recordStorage.readList(type, filter);
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "type", type);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "filter", filter);
+		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
+	}
+
+	@Test
+	public void testDefaultReadListOld() throws Exception {
 		assertTrue(recordStorage.readList(List.of("types"),
 				new Filter()) instanceof StorageReadResult);
 	}
 
 	@Test
-	public void testReadList() throws Exception {
+	public void testReadListOld() throws Exception {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				StorageReadResult::new);

@@ -55,6 +55,13 @@ public class RecordStorageSpy implements RecordStorage {
 	}
 
 	@Override
+	public void create(String type, String id, DataGroup dataRecord, Set<StorageTerm> storageTerms,
+			Set<Link> links, String dataDivider) {
+		MCR.addCall("type", type, "id", id, "dataRecord", dataRecord, "storageTerms", storageTerms,
+				"links", links, "dataDivider", dataDivider);
+	}
+
+	@Override
 	public DataGroup read(List<String> types, String id) {
 		return (DataGroup) MCR.addCallAndReturnFromMRV("types", types, "id", id);
 	}
@@ -65,10 +72,13 @@ public class RecordStorageSpy implements RecordStorage {
 	}
 
 	@Override
-	public void create(String type, String id, DataGroup dataRecord, Set<StorageTerm> storageTerms,
-			Set<Link> links, String dataDivider) {
-		MCR.addCall("type", type, "id", id, "dataRecord", dataRecord, "storageTerms", storageTerms,
-				"links", links, "dataDivider", dataDivider);
+	public StorageReadResult readList(String type, Filter filter) {
+		return (StorageReadResult) MCR.addCallAndReturnFromMRV("type", type, "filter", filter);
+	}
+
+	@Override
+	public StorageReadResult readList(List<String> types, Filter filter) {
+		return (StorageReadResult) MCR.addCallAndReturnFromMRV("types", types, "filter", filter);
 	}
 
 	@Override
@@ -87,11 +97,6 @@ public class RecordStorageSpy implements RecordStorage {
 			Set<Link> links, String dataDivider) {
 		MCR.addCall("type", type, "id", id, "dataRecord", dataRecord, "storageTerms", storageTerms,
 				"links", links, "dataDivider", dataDivider);
-	}
-
-	@Override
-	public StorageReadResult readList(List<String> types, Filter filter) {
-		return (StorageReadResult) MCR.addCallAndReturnFromMRV("types", types, "filter", filter);
 	}
 
 	@Override
