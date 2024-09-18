@@ -27,7 +27,7 @@ import se.uu.ub.cora.data.DataGroup;
 import se.uu.ub.cora.data.DataRecordGroup;
 import se.uu.ub.cora.data.collected.Link;
 import se.uu.ub.cora.data.collected.StorageTerm;
-import se.uu.ub.cora.data.spies.DataGroupSpy;
+import se.uu.ub.cora.data.spies.DataRecordGroupSpy;
 import se.uu.ub.cora.storage.Filter;
 import se.uu.ub.cora.storage.RecordStorage;
 import se.uu.ub.cora.storage.StorageReadResult;
@@ -43,7 +43,7 @@ public class RecordStorageSpy implements RecordStorage {
 
 		// TODO: We do not have possibility to overload methods in MRV.
 		// Meanwhile no default value will be returned for new read in this spy. Pleas fix.
-		MRV.setDefaultReturnValuesSupplier("read", DataGroupSpy::new);
+		MRV.setDefaultReturnValuesSupplier("read", DataRecordGroupSpy::new);
 		// MRV.setDefaultReturnValuesSupplier("read", DataRecordGroupSpy::new);
 
 		MRV.setDefaultReturnValuesSupplier("readList", StorageReadResult::new);
