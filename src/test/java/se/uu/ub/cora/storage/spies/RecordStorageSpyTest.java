@@ -68,11 +68,6 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testDefaultReadOld() throws Exception {
-		assertTrue(recordStorage.read(List.of("types"), "id") instanceof DataGroupSpy);
-	}
-
-	@Test
 	public void testReadOld() throws Exception {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV, DataGroupSpy::new);
@@ -86,11 +81,10 @@ public class RecordStorageSpyTest {
 		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
 	}
 
-	// TODO: see comments on the implementation class.
-	// @Test
-	// public void testDefaultRead() throws Exception {
-	// assertTrue(recordStorage.read("type", "id") instanceof DataRecordGroupSpy);
-	// }
+	@Test
+	public void testDefaultRead() throws Exception {
+		assertTrue(recordStorage.read("type", "id") instanceof DataRecordGroupSpy);
+	}
 
 	@Test
 	public void testRead() throws Exception {
