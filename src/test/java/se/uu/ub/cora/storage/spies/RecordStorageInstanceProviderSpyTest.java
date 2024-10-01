@@ -34,7 +34,6 @@ import se.uu.ub.cora.testutils.spies.MCRSpy;
 
 public class RecordStorageInstanceProviderSpyTest {
 
-	private static final String ADD_CALL = "addCall";
 	private static final String ADD_CALL_AND_RETURN_FROM_MRV = "addCallAndReturnFromMRV";
 	private MCRSpy MCRSpy;
 	private MethodCallRecorder mcrForSpy;
