@@ -32,7 +32,6 @@ public class ResourceArchiveSpy implements ResourceArchive {
 
 	public ResourceArchiveSpy() {
 		MCR.useMRV(MRV);
-		MRV.setDefaultReturnValuesSupplier("createMasterResource", () -> 100L);
 		MRV.setDefaultReturnValuesSupplier("readMasterResource", InputStreamSpy::new);
 		MRV.setDefaultReturnValuesSupplier("readMasterResourceMetadata",
 				() -> new ResourceMetadata("someFileSize", "someChecksumSHA512"));
