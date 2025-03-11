@@ -271,4 +271,45 @@ public class RecordStorageSpyTest {
 		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "filter", filter);
 		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
 	}
+
+	@Test
+	public void testDefaultGetLinksFromRecord() {
+		assertEquals(recordStorage.getLinksFromRecord("someType", "someId"),
+				Collections.emptyList());
+	}
+
+	@Test
+	public void testGetLinksFromRecord() {
+		recordStorage.MCR = MCRSpy;
+		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
+				() -> new LinkedHashSet<>());
+
+		Collection<Link> retunedValue = recordStorage.getLinksFromRecord("someType", "someId");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "type", "someType");
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", "someId");
+		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
+	}
+
+	@Test
+	public void testDefaultGetStorageTermsForRecord() {
+		assertEquals(recordStorage.getStorageTermsForRecord("someType", "someId"),
+				Collections.emptyList());
+	}
+
+	@Test
+	public void testGetStorageTermsForRecord() {
+		recordStorage.MCR = MCRSpy;
+		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
+				() -> new LinkedHashSet<>());
+
+		Collection<StorageTerm> retunedValue = recordStorage.getStorageTermsForRecord("someType",
+				"someId");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "type", "someType");
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", "someId");
+		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, retunedValue);
+	}
 }

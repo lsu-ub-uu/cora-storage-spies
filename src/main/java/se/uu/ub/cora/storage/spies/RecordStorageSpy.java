@@ -48,6 +48,8 @@ public class RecordStorageSpy implements RecordStorage {
 		MRV.setDefaultReturnValuesSupplier("linksExistForRecord", (Supplier<Boolean>) () -> false);
 		MRV.setDefaultReturnValuesSupplier("recordExists", (Supplier<Boolean>) () -> false);
 		MRV.setDefaultReturnValuesSupplier("getLinksToRecord", Collections::emptySet);
+		MRV.setDefaultReturnValuesSupplier("getLinksFromRecord", Collections::emptySet);
+		MRV.setDefaultReturnValuesSupplier("getStorageTermsForRecord", Collections::emptySet);
 		MRV.setDefaultReturnValuesSupplier("getTotalNumberOfRecordsForTypes",
 				(Supplier<Long>) () -> 0L);
 	}
@@ -104,6 +106,16 @@ public class RecordStorageSpy implements RecordStorage {
 	@Override
 	public Set<Link> getLinksToRecord(String type, String id) {
 		return (Set<Link>) MCR.addCallAndReturnFromMRV("type", type, "id", id);
+	}
+
+	@Override
+	public Set<Link> getLinksFromRecord(String type, String id) {
+		return (Set<Link>) MCR.addCallAndReturnFromMRV("type", type, "id", id);
+	}
+
+	@Override
+	public Set<StorageTerm> getStorageTermsForRecord(String type, String id) {
+		return (Set<StorageTerm>) MCR.addCallAndReturnFromMRV("type", type, "id", id);
 	}
 
 	@Override
