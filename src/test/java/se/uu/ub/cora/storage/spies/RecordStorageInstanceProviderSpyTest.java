@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Uppsala University Library
+ * Copyright 2022, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -35,6 +35,7 @@ import se.uu.ub.cora.testutils.spies.MCRSpy;
 public class RecordStorageInstanceProviderSpyTest {
 
 	private static final String ADD_CALL_AND_RETURN_FROM_MRV = "addCallAndReturnFromMRV";
+	private static final String ADD_CALL = "addCall";
 	private MCRSpy MCRSpy;
 	private MethodCallRecorder mcrForSpy;
 	private RecordStorageInstanceProviderSpy recordStorage;
@@ -47,20 +48,20 @@ public class RecordStorageInstanceProviderSpyTest {
 	}
 
 	@Test
-	public void testMakeSureSpyHelpersAreSetUp() throws Exception {
+	public void testMakeSureSpyHelpersAreSetUp() {
 		assertTrue(recordStorage.MCR instanceof MethodCallRecorder);
 		assertTrue(recordStorage.MRV instanceof MethodReturnValues);
 		assertSame(recordStorage.MCR.onlyForTestGetMRV(), recordStorage.MRV);
 	}
 
 	@Test
-	public void testDefaultGetOrderToSelectImplementionsBy() throws Exception {
+	public void testDefaultGetOrderToSelectImplementionsBy() {
 		int order = recordStorage.getOrderToSelectImplementionsBy();
 		assertEquals(order, 0);
 	}
 
 	@Test
-	public void testGetOrderToSelectImplementionsBy() throws Exception {
+	public void testGetOrderToSelectImplementionsBy() {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				(Supplier<Integer>) () -> 99);
@@ -72,12 +73,12 @@ public class RecordStorageInstanceProviderSpyTest {
 	}
 
 	@Test
-	public void testDefaultGetRecordStorage() throws Exception {
+	public void testDefaultGetRecordStorage() {
 		assertTrue(recordStorage.getRecordStorage() instanceof RecordStorage);
 	}
 
 	@Test
-	public void testGetRecordStorage() throws Exception {
+	public void testGetRecordStorage() {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				RecordStorageSpy::new);
@@ -88,4 +89,15 @@ public class RecordStorageInstanceProviderSpyTest {
 		mcrForSpy.assertReturn(ADD_CALL_AND_RETURN_FROM_MRV, 0, returnedValue);
 	}
 
+	@Test
+	public void testDataChanged() {
+		recordStorage.MCR = MCRSpy;
+
+		recordStorage.dataChanged("someType", "someId", "someAction");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "type", "someType");
+		mcrForSpy.assertParameter(ADD_CALL, 0, "id", "someId");
+		mcrForSpy.assertParameter(ADD_CALL, 0, "action", "someAction");
+	}
 }

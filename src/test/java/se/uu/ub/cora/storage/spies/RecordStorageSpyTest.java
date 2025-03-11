@@ -61,14 +61,14 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testMakeSureSpyHelpersAreSetUp() throws Exception {
+	public void testMakeSureSpyHelpersAreSetUp() {
 		assertTrue(recordStorage.MCR instanceof MethodCallRecorder);
 		assertTrue(recordStorage.MRV instanceof MethodReturnValues);
 		assertSame(recordStorage.MCR.onlyForTestGetMRV(), recordStorage.MRV);
 	}
 
 	@Test
-	public void testReadOld() throws Exception {
+	public void testReadOld() {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV, DataGroupSpy::new);
 
@@ -82,12 +82,12 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testDefaultRead() throws Exception {
+	public void testDefaultRead() {
 		assertTrue(recordStorage.read("type", "id") instanceof DataRecordGroupSpy);
 	}
 
 	@Test
-	public void testRead() throws Exception {
+	public void testRead() {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				DataRecordGroupSpy::new);
@@ -101,7 +101,7 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testCreate() throws Exception {
+	public void testCreate() {
 		recordStorage.MCR = MCRSpy;
 		DataGroup data = new DataGroupSpy();
 		Set<StorageTerm> storageTerms = new LinkedHashSet<>();
@@ -119,7 +119,7 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testDeleteByTypeAndId() throws Exception {
+	public void testDeleteByTypeAndId() {
 		recordStorage.MCR = MCRSpy;
 
 		recordStorage.deleteByTypeAndId("someType", "someId");
@@ -130,12 +130,12 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testDefaultLinksExistForRecord() throws Exception {
+	public void testDefaultLinksExistForRecord() {
 		assertFalse(recordStorage.linksExistForRecord("someType", "someId"));
 	}
 
 	@Test
-	public void testLinksExistForRecord() throws Exception {
+	public void testLinksExistForRecord() {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				(Supplier<Boolean>) () -> true);
@@ -149,7 +149,7 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testUpdate() throws Exception {
+	public void testUpdate() {
 		recordStorage.MCR = MCRSpy;
 		DataGroup data = new DataGroupSpy();
 		Set<StorageTerm> storageTerms = new LinkedHashSet<>();
@@ -167,12 +167,12 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testDefaultReadList() throws Exception {
+	public void testDefaultReadList() {
 		assertTrue(recordStorage.readList("types", new Filter()) instanceof StorageReadResult);
 	}
 
 	@Test
-	public void testReadList() throws Exception {
+	public void testReadList() {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				StorageReadResult::new);
@@ -188,13 +188,13 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testDefaultReadListOld() throws Exception {
+	public void testDefaultReadListOld() {
 		assertTrue(recordStorage.readList(List.of("types"),
 				new Filter()) instanceof StorageReadResult);
 	}
 
 	@Test
-	public void testReadListOld() throws Exception {
+	public void testReadListOld() {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				StorageReadResult::new);
@@ -210,14 +210,14 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testDefaultRecordExists() throws Exception {
+	public void testDefaultRecordExists() {
 		List<String> types = List.of("someType");
 
 		assertFalse(recordStorage.recordExists(types, "someId"));
 	}
 
 	@Test
-	public void testRecordExist() throws Exception {
+	public void testRecordExist() {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				(Supplier<Boolean>) () -> true);
@@ -232,12 +232,12 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testDefaultGetLinksToRecord() throws Exception {
+	public void testDefaultGetLinksToRecord() {
 		assertEquals(recordStorage.getLinksToRecord("someType", "someId"), Collections.emptyList());
 	}
 
 	@Test
-	public void testGetLinksToRecord() throws Exception {
+	public void testGetLinksToRecord() {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				(Supplier<Set<Link>>) () -> new LinkedHashSet<>());
@@ -251,13 +251,13 @@ public class RecordStorageSpyTest {
 	}
 
 	@Test
-	public void testDefaultGetTotalNumberOfRecordsForTypes() throws Exception {
+	public void testDefaultGetTotalNumberOfRecordsForTypes() {
 		assertEquals(recordStorage.getTotalNumberOfRecordsForTypes(List.of("types"), new Filter()),
 				0);
 	}
 
 	@Test
-	public void testGetTotalNumberOfRecordsForTypes() throws Exception {
+	public void testGetTotalNumberOfRecordsForTypes() {
 		recordStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				(Supplier<Long>) () -> 321L);

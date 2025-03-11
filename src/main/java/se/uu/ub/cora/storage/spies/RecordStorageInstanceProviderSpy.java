@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Uppsala University Library
+ * Copyright 2022, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -46,6 +46,11 @@ public class RecordStorageInstanceProviderSpy implements RecordStorageInstancePr
 	@Override
 	public RecordStorage getRecordStorage() {
 		return (RecordStorage) MCR.addCallAndReturnFromMRV();
+	}
+
+	@Override
+	public void dataChanged(String type, String id, String action) {
+		MCR.addCall("type", type, "id", id, "action", action);
 	}
 
 }
