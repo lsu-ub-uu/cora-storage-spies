@@ -13,4 +13,5 @@ module se.uu.ub.cora.storage.spies {
 	exports se.uu.ub.cora.storage.spies;
 	exports se.uu.ub.cora.storage.spies.archive;
 	exports se.uu.ub.cora.storage.spies.path;
+	exports se.uu.ub.cora.storage.spies.hash;
 }

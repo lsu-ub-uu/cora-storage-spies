@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Uppsala University Library
+ * Copyright 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,24 +16,23 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.storage.spies.path;
+package se.uu.ub.cora.storage.spies.hash;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.storage.hash.CoraDigestUtils;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 import se.uu.ub.cora.testutils.spies.MCRSpy;
 
-public class StreamPathBuilderSpyTest {
+public class CoraDigestUtilsSpyTest {
 
-	private static final String SOME_ID = "someId";
-	private static final String SOME_TYPE = "someType";
-	private static final String SOME_DATA_DVIDER = "someDataDvider";
+	private static final String SOME_VALUE_TO_HASH = "someValueToHash";
 	private static final String ADD_CALL_AND_RETURN_FROM_MRV = "addCallAndReturnFromMRV";
-	private static final String SOME_REPRESENTATION = "someRepresentation";
-	private StreamPathBuilderSpy streamPathBuilderSpy;
+	private CoraDigestUtilsSpy digestor;
 	private MCRSpy MCRSpy;
 	private MethodCallRecorder mcrForSpy;
 
@@ -41,33 +40,32 @@ public class StreamPathBuilderSpyTest {
 	public void beforeMethod() {
 		MCRSpy = new MCRSpy();
 		mcrForSpy = MCRSpy.MCR;
-		streamPathBuilderSpy = new StreamPathBuilderSpy();
+		digestor = new CoraDigestUtilsSpy();
+	}
+
+	@Test
+	public void testImplements() {
+		assertTrue(digestor instanceof CoraDigestUtils);
 	}
 
 	@Test
 	public void testDefaultBuildPathToAFileAndEnsureFolderExists() {
-		String path = streamPathBuilderSpy.buildPathToAFileAndEnsureFolderExists(SOME_DATA_DVIDER,
-				SOME_TYPE, SOME_ID, SOME_REPRESENTATION);
+		String hashedValue = digestor.sha256Hex(SOME_VALUE_TO_HASH);
 
-		assertEquals(path, "somePathToAFile");
+		assertEquals(hashedValue, "someHahedValue");
 	}
 
 	@Test
 	public void testBuildPathToAFileAndEnsureFolderExists() {
-		streamPathBuilderSpy.MCR = MCRSpy;
-		String expectedPath = "someOtherPath";
-		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV, () -> expectedPath);
+		digestor.MCR = MCRSpy;
+		String expectedHashedValue = "someOtherHashedValue";
+		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
+				() -> expectedHashedValue);
 
-		String path = streamPathBuilderSpy.buildPathToAFileAndEnsureFolderExists(SOME_DATA_DVIDER,
-				SOME_TYPE, SOME_ID, SOME_REPRESENTATION);
+		String hashedValue = digestor.sha256Hex(SOME_VALUE_TO_HASH);
 
 		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
-		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "dataDivider", SOME_DATA_DVIDER);
-		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "type", SOME_TYPE);
-		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", SOME_ID);
-		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "representation",
-				SOME_REPRESENTATION);
-		assertEquals(path, expectedPath);
+		assertEquals(hashedValue, expectedHashedValue);
 
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Uppsala University Library
+ * Copyright 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,26 +16,24 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.storage.spies.path;
+package se.uu.ub.cora.storage.spies.hash;
 
-import se.uu.ub.cora.storage.StreamPathBuilder;
+import se.uu.ub.cora.storage.hash.CoraDigestUtils;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 import se.uu.ub.cora.testutils.mrv.MethodReturnValues;
 
-public class StreamPathBuilderSpy implements StreamPathBuilder {
+public class CoraDigestUtilsSpy implements CoraDigestUtils {
 	public MethodCallRecorder MCR = new MethodCallRecorder();
 	public MethodReturnValues MRV = new MethodReturnValues();
 
-	public StreamPathBuilderSpy() {
+	public CoraDigestUtilsSpy() {
 		MCR.useMRV(MRV);
-		MRV.setDefaultReturnValuesSupplier("buildPathToAFileAndEnsureFolderExists",
-				() -> "somePathToAFile");
+		MRV.setDefaultReturnValuesSupplier("sha256Hex", () -> "someHahedValue");
 	}
 
 	@Override
-	public String buildPathToAFileAndEnsureFolderExists(String dataDivider, String type, String id,
-			String representation) {
-		return (String) MCR.addCallAndReturnFromMRV("dataDivider", dataDivider, "type", type, "id",
-				id, "representation", representation);
+	public String sha256Hex(String valueToHash) {
+		return (String) MCR.addCallAndReturnFromMRV("valueToHash", valueToHash);
 	}
+
 }
