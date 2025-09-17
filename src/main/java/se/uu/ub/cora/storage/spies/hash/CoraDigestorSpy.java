@@ -18,21 +18,21 @@
  */
 package se.uu.ub.cora.storage.spies.hash;
 
-import se.uu.ub.cora.storage.hash.CoraDigestUtils;
+import se.uu.ub.cora.storage.hash.CoraDigestor;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 import se.uu.ub.cora.testutils.mrv.MethodReturnValues;
 
-public class CoraDigestUtilsSpy implements CoraDigestUtils {
+public class CoraDigestorSpy implements CoraDigestor {
 	public MethodCallRecorder MCR = new MethodCallRecorder();
 	public MethodReturnValues MRV = new MethodReturnValues();
 
-	public CoraDigestUtilsSpy() {
+	public CoraDigestorSpy() {
 		MCR.useMRV(MRV);
-		MRV.setDefaultReturnValuesSupplier("sha256Hex", () -> "someHahedValue");
+		MRV.setDefaultReturnValuesSupplier("stringToSha256Hex", () -> "someHahedValue");
 	}
 
 	@Override
-	public String sha256Hex(String valueToHash) {
+	public String stringToSha256Hex(String valueToHash) {
 		return (String) MCR.addCallAndReturnFromMRV("valueToHash", valueToHash);
 	}
 

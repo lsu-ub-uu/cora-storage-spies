@@ -45,6 +45,33 @@ public class StreamPathBuilderSpyTest {
 	}
 
 	@Test
+	public void testDefaultBuildPathToAFile() {
+		String path = streamPathBuilderSpy.buildPathToAFile(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID,
+				SOME_REPRESENTATION);
+
+		assertEquals(path, "somePathToAFile");
+	}
+
+	@Test
+	public void testBuildPathToAFile() {
+		streamPathBuilderSpy.MCR = MCRSpy;
+		String expectedPath = "someOtherPath";
+		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV, () -> expectedPath);
+
+		String path = streamPathBuilderSpy.buildPathToAFile(SOME_DATA_DVIDER, SOME_TYPE, SOME_ID,
+				SOME_REPRESENTATION);
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "dataDivider", SOME_DATA_DVIDER);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "type", SOME_TYPE);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", SOME_ID);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "representation",
+				SOME_REPRESENTATION);
+		assertEquals(path, expectedPath);
+
+	}
+
+	@Test
 	public void testDefaultBuildPathToAFileAndEnsureFolderExists() {
 		String path = streamPathBuilderSpy.buildPathToAFileAndEnsureFolderExists(SOME_DATA_DVIDER,
 				SOME_TYPE, SOME_ID, SOME_REPRESENTATION);

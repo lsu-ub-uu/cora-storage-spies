@@ -24,15 +24,15 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.storage.hash.CoraDigestUtils;
+import se.uu.ub.cora.storage.hash.CoraDigestor;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 import se.uu.ub.cora.testutils.spies.MCRSpy;
 
-public class CoraDigestUtilsSpyTest {
+public class CoraDigestorSpyTest {
 
 	private static final String SOME_VALUE_TO_HASH = "someValueToHash";
 	private static final String ADD_CALL_AND_RETURN_FROM_MRV = "addCallAndReturnFromMRV";
-	private CoraDigestUtilsSpy digestor;
+	private CoraDigestorSpy digestor;
 	private MCRSpy MCRSpy;
 	private MethodCallRecorder mcrForSpy;
 
@@ -40,17 +40,17 @@ public class CoraDigestUtilsSpyTest {
 	public void beforeMethod() {
 		MCRSpy = new MCRSpy();
 		mcrForSpy = MCRSpy.MCR;
-		digestor = new CoraDigestUtilsSpy();
+		digestor = new CoraDigestorSpy();
 	}
 
 	@Test
 	public void testImplements() {
-		assertTrue(digestor instanceof CoraDigestUtils);
+		assertTrue(digestor instanceof CoraDigestor);
 	}
 
 	@Test
 	public void testDefaultBuildPathToAFileAndEnsureFolderExists() {
-		String hashedValue = digestor.sha256Hex(SOME_VALUE_TO_HASH);
+		String hashedValue = digestor.stringToSha256Hex(SOME_VALUE_TO_HASH);
 
 		assertEquals(hashedValue, "someHahedValue");
 	}
@@ -62,7 +62,7 @@ public class CoraDigestUtilsSpyTest {
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				() -> expectedHashedValue);
 
-		String hashedValue = digestor.sha256Hex(SOME_VALUE_TO_HASH);
+		String hashedValue = digestor.stringToSha256Hex(SOME_VALUE_TO_HASH);
 
 		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
 		assertEquals(hashedValue, expectedHashedValue);

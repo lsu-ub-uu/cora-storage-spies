@@ -28,8 +28,16 @@ public class StreamPathBuilderSpy implements StreamPathBuilder {
 
 	public StreamPathBuilderSpy() {
 		MCR.useMRV(MRV);
+		MRV.setDefaultReturnValuesSupplier("buildPathToAFile", () -> "somePathToAFile");
 		MRV.setDefaultReturnValuesSupplier("buildPathToAFileAndEnsureFolderExists",
 				() -> "somePathToAFile");
+	}
+
+	@Override
+	public String buildPathToAFile(String dataDivider, String type, String id,
+			String representation) {
+		return (String) MCR.addCallAndReturnFromMRV("dataDivider", dataDivider, "type", type, "id",
+				id, "representation", representation);
 	}
 
 	@Override
@@ -38,4 +46,5 @@ public class StreamPathBuilderSpy implements StreamPathBuilder {
 		return (String) MCR.addCallAndReturnFromMRV("dataDivider", dataDivider, "type", type, "id",
 				id, "representation", representation);
 	}
+
 }
