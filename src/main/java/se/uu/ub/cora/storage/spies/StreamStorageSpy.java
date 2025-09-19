@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Uppsala University Library
+ * Copyright 2023, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -36,20 +36,22 @@ public class StreamStorageSpy implements StreamStorage {
 	}
 
 	@Override
-	public long store(String streamId, String dataDivider, InputStream stream) {
-		return (long) MCR.addCallAndReturnFromMRV("streamId", streamId, "dataDivider", dataDivider,
-				"stream", stream);
+	public long store(String dataDivider, String type, String id, String representation,
+			InputStream stream) {
+		return (long) MCR.addCallAndReturnFromMRV("dataDivider", dataDivider, "type", type, "id",
+				id, "representation", representation, "stream", stream);
 	}
 
 	@Override
-	public InputStream retrieve(String streamId, String dataDivider) {
-		return (InputStream) MCR.addCallAndReturnFromMRV("streamId", streamId, "dataDivider",
-				dataDivider);
+	public InputStream retrieve(String dataDivider, String type, String id, String representation) {
+		return (InputStream) MCR.addCallAndReturnFromMRV("dataDivider", dataDivider, "type", type,
+				"id", id, "representation", representation);
 	}
 
 	@Override
-	public void delete(String streamId, String dataDivider) {
-		MCR.addCall("streamId", streamId, "dataDivider", dataDivider);
+	public void delete(String dataDivider, String type, String id, String representation) {
+		MCR.addCall("dataDivider", dataDivider, "type", type, "id", id, "representation",
+				representation);
 
 	}
 }

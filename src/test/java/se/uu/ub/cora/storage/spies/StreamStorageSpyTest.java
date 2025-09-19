@@ -34,8 +34,10 @@ import se.uu.ub.cora.testutils.spies.MCRSpy;
 
 public class StreamStorageSpyTest {
 
-	private static final String STREAM_ID = "someStreamId";
 	private static final String DATA_DIVIDER = "someDataDivider";
+	private static final String TYPE = "someType";
+	private static final String ID = "someId";
+	private static final String REPRESENTATION = "someRepresentation";
 	private static final String ADD_CALL = "addCall";
 	private static final String ADD_CALL_AND_RETURN_FROM_MRV = "addCallAndReturnFromMRV";
 	private MCRSpy MCRSpy;
@@ -52,57 +54,66 @@ public class StreamStorageSpyTest {
 	}
 
 	@Test
-	public void testMakeSureSpyHelpersAreSetUp() throws Exception {
+	public void testMakeSureSpyHelpersAreSetUp() {
 		assertTrue(streamStorage.MCR instanceof MethodCallRecorder);
 		assertTrue(streamStorage.MRV instanceof MethodReturnValues);
 		assertSame(streamStorage.MCR.onlyForTestGetMRV(), streamStorage.MRV);
 	}
 
 	@Test
-	public void testStoreDefault() throws Exception {
-		assertEquals(streamStorage.store(STREAM_ID, DATA_DIVIDER, stream), 100L);
+	public void testStoreDefault() {
+		assertEquals(streamStorage.store(DATA_DIVIDER, TYPE, ID, REPRESENTATION, stream), 100L);
 	}
 
 	@Test
-	public void testStore() throws Exception {
+	public void testStore() {
 		streamStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV, () -> 1L);
 
-		streamStorage.store(STREAM_ID, DATA_DIVIDER, stream);
+		streamStorage.store(DATA_DIVIDER, TYPE, ID, REPRESENTATION, stream);
 
 		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
-		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "streamId", STREAM_ID);
 		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "dataDivider", DATA_DIVIDER);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "type", TYPE);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", ID);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "representation",
+				REPRESENTATION);
 		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "stream", stream);
 	}
 
 	@Test
-	public void testRetrieveDefault() throws Exception {
-		assertTrue(streamStorage.retrieve(STREAM_ID, DATA_DIVIDER) instanceof InputStream);
+	public void testRetrieveDefault() {
+		assertTrue(streamStorage.retrieve(DATA_DIVIDER, TYPE, ID,
+				REPRESENTATION) instanceof InputStream);
 	}
 
 	@Test
-	public void testRetrieve() throws Exception {
+	public void testRetrieve() {
 		streamStorage.MCR = MCRSpy;
 		MCRSpy.MRV.setDefaultReturnValuesSupplier(ADD_CALL_AND_RETURN_FROM_MRV,
 				InputStreamSpy::new);
 
-		streamStorage.retrieve(STREAM_ID, DATA_DIVIDER);
+		streamStorage.retrieve(DATA_DIVIDER, TYPE, ID, REPRESENTATION);
 
 		mcrForSpy.assertMethodWasCalled(ADD_CALL_AND_RETURN_FROM_MRV);
-		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "streamId", STREAM_ID);
 		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "dataDivider", DATA_DIVIDER);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "type", TYPE);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "id", ID);
+		mcrForSpy.assertParameter(ADD_CALL_AND_RETURN_FROM_MRV, 0, "representation",
+				REPRESENTATION);
 	}
 
 	@Test
-	public void testDelete() throws Exception {
+	public void testDelete() {
 		streamStorage.MCR = MCRSpy;
 
-		streamStorage.delete(STREAM_ID, DATA_DIVIDER);
+		streamStorage.delete(DATA_DIVIDER, TYPE, ID, REPRESENTATION);
 
 		mcrForSpy.assertMethodWasCalled(ADD_CALL);
-		mcrForSpy.assertParameter(ADD_CALL, 0, "streamId", STREAM_ID);
 		mcrForSpy.assertParameter(ADD_CALL, 0, "dataDivider", DATA_DIVIDER);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "type", TYPE);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "id", ID);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "representation", REPRESENTATION);
 	}
 
 }
