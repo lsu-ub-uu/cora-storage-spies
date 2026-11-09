@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Uppsala University Library
+ * Copyright 2022, 2026 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -96,6 +96,13 @@ public class RecordStorageSpy implements RecordStorage {
 			Set<Link> links, String dataDivider) {
 		MCR.addCall("type", type, "id", id, "dataRecord", dataRecord, "storageTerms", storageTerms,
 				"links", links, "dataDivider", dataDivider);
+	}
+
+	@Override
+	public void updateCollectedData(String type, String id, Set<StorageTerm> storageTerms,
+			Set<Link> links, String dataDivider) {
+		MCR.addCall("type", type, "id", id, "storageTerms", storageTerms, "links", links,
+				"dataDivider", dataDivider);
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Uppsala University Library
+ * Copyright 2022, 2026 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -161,6 +161,23 @@ public class RecordStorageSpyTest {
 		mcrForSpy.assertParameter(ADD_CALL, 0, "type", "someType");
 		mcrForSpy.assertParameter(ADD_CALL, 0, "id", "someId");
 		mcrForSpy.assertParameter(ADD_CALL, 0, "dataRecord", data);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "storageTerms", storageTerms);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "links", links);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "dataDivider", "someDataDivider");
+	}
+
+	@Test
+	public void testUpdateCollectedData() {
+		recordStorage.MCR = MCRSpy;
+		Set<StorageTerm> storageTerms = new LinkedHashSet<>();
+		Set<Link> links = new LinkedHashSet<>();
+
+		recordStorage.updateCollectedData("someType", "someId", storageTerms, links,
+				"someDataDivider");
+
+		mcrForSpy.assertMethodWasCalled(ADD_CALL);
+		mcrForSpy.assertParameter(ADD_CALL, 0, "type", "someType");
+		mcrForSpy.assertParameter(ADD_CALL, 0, "id", "someId");
 		mcrForSpy.assertParameter(ADD_CALL, 0, "storageTerms", storageTerms);
 		mcrForSpy.assertParameter(ADD_CALL, 0, "links", links);
 		mcrForSpy.assertParameter(ADD_CALL, 0, "dataDivider", "someDataDivider");
