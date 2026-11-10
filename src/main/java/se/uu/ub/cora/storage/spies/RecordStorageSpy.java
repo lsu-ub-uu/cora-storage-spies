@@ -100,9 +100,9 @@ public class RecordStorageSpy implements RecordStorage {
 
 	@Override
 	public void updateCollectedData(String type, String id, Set<StorageTerm> storageTerms,
-			Set<Link> links, String dataDivider) {
-		MCR.addCall("type", type, "id", id, "storageTerms", storageTerms, "links", links,
-				"dataDivider", dataDivider);
+			String dataDivider) {
+		MCR.addCall("type", type, "id", id, "storageTerms", storageTerms, "dataDivider",
+				dataDivider);
 	}
 
 	@Override
